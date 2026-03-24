@@ -412,7 +412,8 @@ nixlLibfabricRail::nixlLibfabricRail(const std::string &device,
     }
     hints->caps = 0;
     hints->caps = FI_MSG | FI_RMA | FI_HMEM; // Try with FI_HMEM first
-    hints->caps |= FI_LOCAL_COMM | FI_REMOTE_COMM;
+    // CXI: FI_LOCAL_COMM|FI_REMOTE_COMM not advertised by CXI provider
+    // hints->caps |= FI_LOCAL_COMM | FI_REMOTE_COMM;
     hints->mode = FI_CONTEXT;
     hints->ep_attr->type = FI_EP_RDM;
     // Configure memory registration mode based on provider capabilities
@@ -444,7 +445,8 @@ nixlLibfabricRail::nixlLibfabricRail(const std::string &device,
 
             // Retry without FI_HMEM
             hints->caps = FI_MSG | FI_RMA;
-            hints->caps |= FI_LOCAL_COMM | FI_REMOTE_COMM;
+            // CXI: FI_LOCAL_COMM|FI_REMOTE_COMM not advertised by CXI provider
+            // hints->caps |= FI_LOCAL_COMM | FI_REMOTE_COMM;
 
             ret = fi_getinfo(FI_VERSION(1, 18), NULL, NULL, 0, hints, &info);
             if (ret) {
