@@ -1085,11 +1085,14 @@ nixlLibfabricEngine::postXfer(const nixl_xfer_op_t &operation,
 
     // Send notification immediately after successful request submission
     if (backend_handle->has_notif && backend_handle->operation_ == nixl_xfer_op_t::NIXL_WRITE) {
+        // CXI: skip write-completion tracking (fi_writedata not supported, so remote
+        // never receives per-write immediate data. Set expected_completions=0 so
+        // notification fires on MSG arrival alone.)
         nixl_status_t notif_status = notifSendPriv(remote_agent,
                                                    backend_handle->binary_notifs,
                                                    backend_handle->total_notif_msg_len,
                                                    backend_handle->post_xfer_id,
-                                                   backend_handle->get_submitted_requests_count());
+                                                   0);
         if (notif_status != NIXL_SUCCESS) {
             NIXL_ERROR << "Failed to send notification";
             return notif_status;

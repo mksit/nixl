@@ -1099,16 +1099,15 @@ nixlLibfabricRail::postWrite(const void *local_buffer,
     int attempt = 0;
 
     while (true) {
-        // Libfabric fi_writedata call
-        ret = fi_writedata(endpoint,
-                           local_buffer,
-                           length,
-                           local_desc,
-                           immediate_data,
-                           dest_addr,
-                           remote_addr,
-                           remote_key,
-                           &req->ctx);
+        // CXI: fi_write replaces fi_writedata (CXI doesn't support RMA with immediate data)
+        ret = fi_write(endpoint,
+                       local_buffer,
+                       length,
+                       local_desc,
+                       dest_addr,
+                       remote_addr,
+                       remote_key,
+                       &req->ctx);
 
         if (ret == 0) {
             // Success

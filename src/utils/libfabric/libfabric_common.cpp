@@ -48,7 +48,8 @@ getAvailableNetworkDevices() {
     hints->caps = 0;
     hints->caps = FI_MSG | FI_RMA; // Basic messaging and RMA
 
-    hints->caps |= FI_LOCAL_COMM | FI_REMOTE_COMM;
+    // CXI: FI_LOCAL_COMM|FI_REMOTE_COMM not advertised by CXI provider
+    // hints->caps |= FI_LOCAL_COMM | FI_REMOTE_COMM;
     hints->mode = FI_CONTEXT;
     hints->ep_attr->type = FI_EP_RDM;
 
